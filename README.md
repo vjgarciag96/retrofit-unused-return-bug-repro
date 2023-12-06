@@ -7,20 +7,14 @@ The steps to reproduce the issue are:
 
 ```kotlin
 @Serializable
-data class RequestBody(
-    @SerialName("paramA") val paramA: String,
-    @SerialName("paramB") val paramB: Int,
-)
-
-@Serializable
 data class ResponseBody(
     @SerialName("status") val status: String? = null,
 )
 
 interface ExampleApiService {
 
-    @POST("endpoint/v1")
-    suspend fun postOperation(
+    @GET("endpoint/v1")
+    suspend fun getOperation(
         @Body requestBody: RequestBody,
     ): Response<ResponseBody>
 
@@ -39,9 +33,9 @@ interface ExampleApiService {
 2. You code uses the API call but ignores the response body.
 
 ```kotlin
-val apiService by factory()
+val apiService = ExampleApiService.create()
 
-val response = apiService.postOperation(RequestBody("Test", 1))
+val response = apiService.getOperation(RequestBody("Test", 1))
 
 if (response.isSuccessful) {
     // ignore body
@@ -78,8 +72,8 @@ Please ensure that class is marked as '@Serializable' and that the serialization
 	... 80 more
 ```
 
-I believe the problem is caused by a combination of R8, retrofit, and kotlinx serialization:
+I believe the problem is caused by a combination of R8, retrofit, and `Json`'s `ConverterFactory` in this example:
 
 * R8 detects the `ResponseBody` type is unused, and so it removes the class and replaces its usages with the `Object` type.
-* When retrofit tries to create the responseConverter for `ExampleApiService.postOperation`, it delegates to `Json`s `ConverterFactory`, which will provide the appropriate kotlinx serialization deserializer.
-* Kotlinx serialization finds that the type it needs to provide a deserializer for is `Object` (or `Any` in the Kotlin world), and fails because it does not know how to do that.
+* When retrofit tries to create the responseConverter for `ExampleApiService.getOperation`, it delegates to `Json`s `ConverterFactory`, which will provide the appropriate deserializer.
+* `Json`s `ConverterFactory` finds that the type it needs to provide a deserializer for is `Object` (or `Any` in the Kotlin world) and fails because it does not know how to do that.
