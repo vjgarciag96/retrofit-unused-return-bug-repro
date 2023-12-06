@@ -82,4 +82,4 @@ I believe the problem is caused by a combination of R8, retrofit, and kotlinx se
 
 * R8 detects the `ResponseBody` type is unused, and so it removes the class and replaces its usages with the `Object` type.
 * When retrofit tries to create the responseConverter for `ExampleApiService.postOperation`, it delegates to `Json`s `ConverterFactory`, which will provide the appropriate kotlinx serialization deserializer.
-* Kotlinx serialization finds that the type it needs to provide a deserialiser for is `Object` (or `Any` in the Kotlin world), and fails because it does not know how to deserialise it.
+* Kotlinx serialization finds that the type it needs to provide a deserializer for is `Object` (or `Any` in the Kotlin world), and fails because it does not know how to do that.
