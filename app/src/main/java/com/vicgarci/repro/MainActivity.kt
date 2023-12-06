@@ -23,12 +23,12 @@ class MainActivity : ComponentActivity() {
             Column(modifier = Modifier.fillMaxSize()) {
                 Test(index = 1) {
                     lifecycleScope.launch {
-                        apiService.postOperation1()
+                        apiService.getOperation1()
                     }
                 }
                 Test(index = 2) {
                     lifecycleScope.launch {
-                        val result = apiService.postOperation2()
+                        val result = apiService.getOperation2()
 
                         // Do something with the response body so R8 does not get rid of it
                         if (result.isSuccessful) {

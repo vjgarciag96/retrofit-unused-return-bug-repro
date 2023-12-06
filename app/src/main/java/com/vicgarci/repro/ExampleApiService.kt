@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.POST
+import retrofit2.http.GET
 
 @Serializable
 data class ResponseBody1(
@@ -21,11 +21,11 @@ data class ResponseBody2(
 
 interface ExampleApiService {
 
-    @POST("endpoint/v1")
-    suspend fun postOperation1(): Response<ResponseBody1>
+    @GET("endpoint/v1")
+    suspend fun getOperation1(): Response<ResponseBody1>
 
-    @POST("endpoint/v2")
-    suspend fun postOperation2(): Response<ResponseBody2>
+    @GET("endpoint/v2")
+    suspend fun getOperation2(): Response<ResponseBody2>
 
     companion object {
         fun create(): ExampleApiService {
