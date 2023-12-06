@@ -7,14 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.Body
 import retrofit2.http.POST
-
-@Serializable
-data class RequestBody(
-    @SerialName("paramA") val paramA: String,
-    @SerialName("paramB") val paramB: Int,
-)
 
 @Serializable
 data class ResponseBody1(
@@ -29,14 +22,10 @@ data class ResponseBody2(
 interface ExampleApiService {
 
     @POST("endpoint/v1")
-    suspend fun postOperation1(
-        @Body requestBody: RequestBody,
-    ): Response<ResponseBody1>
+    suspend fun postOperation1(): Response<ResponseBody1>
 
     @POST("endpoint/v2")
-    suspend fun postOperation2(
-        @Body requestBody: RequestBody,
-    ): Response<ResponseBody2>
+    suspend fun postOperation2(): Response<ResponseBody2>
 
     companion object {
         fun create(): ExampleApiService {
